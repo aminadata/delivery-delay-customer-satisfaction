@@ -1,30 +1,46 @@
-# Delivery Delays & Customer Satisfaction Analysis
-
-## Project Overview
-
-This project analyses how delivery delays affect customer satisfaction in an e-commerce marketplace. Using order and customer review data, I compared review outcomes across different delivery delay groups to identify the point at which delays begin to significantly harm customer ratings.
-
-The analysis shows that while most orders are delivered on time or only slightly late, a small proportion of severely late deliveries accounts for a disproportionate share of 1–2 star reviews. The dashboard focuses on highlighting this imbalance between delivery volume and customer impact to support better operational decision-making.
-
-The key takeaway is that preventing severe delivery delays would deliver the greatest improvement in customer satisfaction.
+## Delivery Delays & Customer Satisfaction Analysis
 
 ## Executive Summary
 
-Severe delivery delays disproportionately drive negative customer reviews.
+Deliveries that arrive more than 3 days late significantly increase the likelihood of negative customer reviews.
 
-Although most orders arrive on time or only slightly late, deliveries that arrive more than 3 days late account for a much higher share of 1–2 star ratings. This analysis identifies the delay threshold at which customer satisfaction drops sharply and highlights where operational focus would have the greatest impact.
+Although only 2.9% of orders are delivered 4+ days late, these orders are 7.7x more likely to receive a 1–2 star rating compared to on-time or slightly late deliveries.
 
-## Business Questions
+The analysis identifies a clear satisfaction threshold at 3 days late and highlights severe delays as a high-leverage operational improvement opportunity.
 
-When do delivery delays begin to significantly harm customer satisfaction?
+## Business Problem
 
-How common are severe delivery delays compared to their impact on reviews?
+Customer reviews directly influence:
 
-Where should the business focus to improve customer ratings most effectively?
+Marketplace trust
 
-## Data
+Seller reputation
 
-This analysis uses the Brazilian E-Commerce Public Dataset (Olist) from Kaggle.
+Conversion rates
+
+Repeat purchases
+
+However, not all delivery delays impact customer satisfaction equally.
+
+This project answers:
+
+At what point do delivery delays significantly affect customer ratings?
+
+How much higher is the risk of negative reviews for severe delays?
+
+Where should operational focus be placed to improve overall customer satisfaction?
+
+## Dataset
+
+Source: Brazilian E-Commerce Public Dataset (Olist) – Kaggle
+
+Scope after cleaning:
+
+~95.7K delivered orders
+
+One review per order
+
+Extreme outliers removed (±60 days)
 
 Key tables used:
 
@@ -32,86 +48,138 @@ Orders
 
 Order Reviews
 
-(Data was joined and prepared to create a single analysis-ready dataset.)
-
 ## Tools Used
 
-SQLite & SQL – data cleaning, joins, and feature creation
+SQLite / SQL – Data cleaning, joins, feature engineering
 
-Power BI – KPI design, segmentation, and executive-level dashboards
+Power BI – KPI design and dashboard development
 
-Data was prepared in SQLite and exported as CSV files for visualisation in Power BI.
+DAX – Custom measures for risk calculation and segmentation
+
+## Data Preparation
+
+To ensure analytical accuracy:
+
+Filtered to delivered orders only
+
+Removed cancelled and unavailable orders
+
+De-duplicated order IDs
+
+Calculated delivery delay:
+
+delay_days = actual_delivery_date - estimated_delivery_date
+
+Created business-friendly delay segments:
+
+Acceptable: On time – 3 days late
+
+High Risk: 4+ days late
+
+Validated one review per order
+
+Removed extreme delay outliers
 
 ## Analytical Approach
 
-Compared actual delivery dates with estimated delivery dates
+Customer dissatisfaction was measured using:
 
-Calculated delivery delay in days
+Low Review Rate (1–2 stars)
 
-Classified deliveries into business-friendly groups:
+Average Review Score
 
-Acceptable: On time to 3 days late
+The analysis compared:
 
-High risk: 4+ days late
+Order volume by delay bucket
 
-Measured customer satisfaction using:
+Low review rate by delay bucket
 
-Average review score
+Average review score by exact delay days
 
-Share of low ratings (1–2 stars)
-
-Designed KPIs to highlight both scale (order volume) and impact (negative reviews)
+A line analysis was conducted to identify the delay threshold at which customer satisfaction declines sharply.
 
 ## Key Insights
 
-Customers are generally satisfied when deliveries arrive on time or up to 3 days late.
+### Clear Threshold at 3 Days Late
 
-Once deliveries exceed 3 days late, customer satisfaction drops sharply.
+Customer satisfaction remains relatively stable through 0–3 days late.
 
-Although severely late orders represent a small share of total orders, they generate a disproportionate share of low reviews.
+Beyond 3 days late, average ratings decline sharply.
 
-## Why This Matters
+### Severe Delays Dramatically Increase Risk
 
-Not all delivery delays cause the same level of damage.
-A small number of severely late deliveries can significantly harm customer trust and overall brand perception.
+Deliveries 4+ days late:
 
-Preventing these high-risk delays offers a much higher return on effort than marginally improving already acceptable delivery times.
+Represent only 2.9% of total orders
 
-## Recommendations
+Have a 74.78% low review rate
 
-Prevent deliveries from exceeding 3 days late, as this is where customer satisfaction declines sharply.
+Compared to 9.73% for acceptable deliveries
 
-Identify high-risk deliveries early to enable intervention before delays escalate.
+Are 7.7x more likely to receive a 1–2 star rating
 
-Communicate proactively with customers when delays are unavoidable to reduce negative review impact.
+This indicates severe delays significantly increase the probability of negative reviews.
 
-## Deliverables
+### High-Leverage Operational Opportunity
 
-A Power BI dashboard showing:
+Although severe delays are rare, their impact on customer sentiment is substantial.
 
-Total order volume and delivery delay distribution
+Targeting these high-risk deliveries offers significantly greater return on operational effort than marginally improving already on-time deliveries.
 
-The sharp decline in review outcomes after 3 days late
+## Business Implications
 
-The disproportionate impact of severe delays on negative reviews
+Not all delays require equal operational focus.
 
-Clear KPIs designed for non-technical decision-makers
+Improving already on-time deliveries yields marginal benefit.
 
-A documented SQL data preparation workflow
+However, preventing deliveries from exceeding 3 days late can significantly reduce the likelihood of negative customer feedback.
 
-## Limitations & Next Steps
-Limitations
+Operational strategies should prioritise:
 
-This analysis focuses on delivery timing and does not include other drivers of customer reviews such as product quality or customer expectations.
+Early identification of high-risk shipments
 
-Findings are based on historical patterns and do not predict individual customer behaviour.
+Intervention before delays exceed 3 days
 
-Seller-level and regional differences were not deeply segmented.
+Proactive customer communication for unavoidable delays
 
-## Next Steps
+## Limitations
 
-Segment results by seller, region, or product category to identify where delays are most damaging.
+Analysis isolates delivery timing and does not control for product quality or seller-level differences.
 
-Analyse the effect of proactive customer communication on review outcomes.
+Findings are based on historical data and are not predictive.
 
-Use these insights to support early-warning dashboards for high-risk deliveries.
+No revenue impact modelling included.
+
+## Future Improvements
+
+Build a predictive model for late-delivery risk
+
+Segment results by seller, region, and product category
+
+Quantify projected improvement in overall rating if severe delays are reduced
+
+## Dashboard Overview
+
+The Power BI dashboard includes:
+
+Executive KPI summary
+
+Low review rate comparison by delay bucket
+
+Order volume distribution
+
+Line analysis showing the 3-day threshold
+
+Clear visual segmentation for decision-makers
+
+## What This Project Demonstrates
+
+Translating raw transactional data into business insights
+
+Identifying operational thresholds
+
+Calculating risk ratios using DAX
+
+Designing executive-level dashboards
+
+Communicating analytical findings clearly
